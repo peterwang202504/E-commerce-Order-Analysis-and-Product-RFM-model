@@ -91,6 +91,8 @@ print(f'淨利率 {(orders["profit"].sum() / orders["revenue"].sum() * 100).roun
 print(f'折扣率 {(orders["discount"].sum() / orders["revenue"].sum() * 100).round(2)}%') 
 print(f'正負毛比率 {(orders["profit"] > 0).value_counts(normalize = True).round(2) * 100}') 
 
+#orders.to_csv(r'C:/Users/lafk0/Desktop/orders.csv', index=False, encoding='utf-8-sig')
+
 
 ########################################## 函數的設計 ##########################################
 
