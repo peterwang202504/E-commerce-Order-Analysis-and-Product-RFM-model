@@ -1,4 +1,4 @@
-##### Project Overview
+## Project Overview
 
 Providing sales reports, breaking down sales trends, and solving business problems are part of a data analyst’s daily responsibilities.  
 This project uses Kaggle’s U.S. e-commerce order data as an example,  
@@ -32,8 +32,9 @@ step-by-step from the category perspective, and finally offer analysis and insig
 **(1) Model Development:**  
 Develop a product-level RFM segmentation model to enhance product management, drive sales growth, and minimize inventory costs.
 
+---
 
-##### 專案概述
+## 專案概述
 
 提供業績報表、拆解業績趨勢、解決商業問題是數據分析師的工作日常。  
 本專案以 Kaggle 美國電商訂單資料為例，嘗試完成兩項工作：  
