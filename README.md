@@ -43,7 +43,7 @@ Develop a product-level RFM segmentation model to enhance product management, dr
 
 ---
 
-### 第一部分：Python數據分析流程與業績分析
+### 第一部分：Python 數據分析流程與業績分析
 
 **(1) 資料前處理：**  
 初步觀察資料，清理異常值與缺失值、轉換資料類型與新增分析欄位，以確保資料品質。  
