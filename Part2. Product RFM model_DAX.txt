@@ -1,0 +1,114 @@
+RFM = 
+VAR last_orderdate = MAX(orders[order_date])
+VAR summary_table =
+    SUMMARIZE(
+        orders,
+        orders[product_id]
+    )
+VAR BaseTable =
+    ADDCOLUMNS(
+        summary_table,
+        "recency",
+        ABS(
+            DATEDIFF(
+                last_orderdate,
+                CALCULATE(
+                    MAX(orders[order_date]),
+                    FILTER(
+                        orders,
+                        orders[product_id] = EARLIER(orders[product_id])
+                    )
+                ),
+                DAY
+            )
+        ),
+        "frequency",
+        CALCULATE(
+            COUNT(orders[order_id]),
+            FILTER(
+                orders,
+                orders[product_id] = EARLIER(orders[product_id])
+            )
+        ),
+        "monetary",
+        CALCULATE(
+            SUM(orders[revenue]),
+            FILTER(
+                orders,
+                orders[product_id] = EARLIER(orders[product_id])
+            )
+        )
+    )
+VAR WithScores =
+    ADDCOLUMNS(
+        BaseTable,
+        "RecencyScore",
+        SWITCH(
+            TRUE(),
+            [recency] <= PERCENTILEX.INC(BaseTable, [recency], 0.2), 5,
+            [recency] <= PERCENTILEX.INC(BaseTable, [recency], 0.4), 4,
+            [recency] <= PERCENTILEX.INC(BaseTable, [recency], 0.6), 3,
+            [recency] <= PERCENTILEX.INC(BaseTable, [recency], 0.8), 2,
+            1
+        ),
+        "FrequencyScore",
+        SWITCH(
+            TRUE(),
+            [frequency] >= PERCENTILEX.INC(BaseTable, [frequency], 0.8), 5,
+            [frequency] >= PERCENTILEX.INC(BaseTable, [frequency], 0.6), 4,
+            [frequency] >= PERCENTILEX.INC(BaseTable, [frequency], 0.4), 3,
+            [frequency] >= PERCENTILEX.INC(BaseTable, [frequency], 0.2), 2,
+            1
+        ),
+        "MonetaryScore",
+        SWITCH(
+            TRUE(),
+            [monetary] >= PERCENTILEX.INC(BaseTable, [monetary], 0.8), 5,
+            [monetary] >= PERCENTILEX.INC(BaseTable, [monetary], 0.6), 4,
+            [monetary] >= PERCENTILEX.INC(BaseTable, [monetary], 0.4), 3,
+            [monetary] >= PERCENTILEX.INC(BaseTable, [monetary], 0.2), 2,
+            1
+        )
+    )
+VAR WithRFMScore =
+    ADDCOLUMNS(
+        WithScores,
+        "RFM_Score",
+        CONCATENATE(
+            CONCATENATE([RecencyScore], [FrequencyScore]), [MonetaryScore]
+        )
+    )
+VAR WithSegment =
+    ADDCOLUMNS(
+        WithRFMScore,
+        "Segment",
+        SWITCH(
+            TRUE(),
+            [RFM_Score] = "555", "1.Star",
+            [RFM_Score] <> "555"
+                && [RecencyScore] >= 4
+                && [FrequencyScore] >= 4
+                && [MonetaryScore] >= 4, "2.Hot Seller",
+            [RecencyScore] >= 4
+                && [FrequencyScore] <= 3
+                && [MonetaryScore] >= 4, "3.Potential",    
+            [RecencyScore] <= 2
+                && [FrequencyScore] >= 4
+                && [MonetaryScore] >= 4, "4.Revival",
+            [RecencyScore] >= 4
+                && [FrequencyScore] <= 2
+                && [MonetaryScore] <= 3, "5.New",
+            [RecencyScore] <= 2
+                && [FrequencyScore] <= 2
+                && [MonetaryScore] <= 2, "6.Disposal",
+            [RecencyScore] >= 2
+                && [RecencyScore] <= 4
+                && [FrequencyScore] >= 2
+                && [FrequencyScore] <= 4
+                && [MonetaryScore] >= 2
+                && [MonetaryScore] <= 4, "7.Regular",
+            "8.Others"
+        )
+    )
+RETURN
+    WithSegment
