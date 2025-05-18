@@ -6,7 +6,7 @@ aiming to accomplish two goals: first, to build an efficient data analysis workf
 
 ---
 
-### Part 1. Data analysis workflow using Python
+### Part 1. Data analysis workflow and sales data analysis using Python
 
 **(1) Data Preprocessing：**  
 Conduct an initial exploration of the data, clean outliers and missing values, convert data types,  
@@ -43,6 +43,8 @@ Develop a product-level RFM segmentation model to enhance product management, dr
 
 ---
 
+### 第一部分：Python數據分析流程與業績分析
+
 **(1) 資料前處理：**  
 初步觀察資料，清理異常值與缺失值、轉換資料類型與新增分析欄位，以確保資料品質。  
 為了貼近零售業現況，參考 2023 年美國電商產業數據，設定訂單資料的折扣率與淨利率。
@@ -56,5 +58,9 @@ Develop a product-level RFM segmentation model to enhance product management, dr
 **(3) 業績的分析：**  
 先整體概述，再從品類的角度利用上述函數逐步拆解業績，並提出對業績的分析與思考。
 
-**(4) 模型的建立：**  
+---
+
+### 第二部分：Power BI 商品RFM模型
+
+**(1) 模型的建立：**  
 建立商品 RFM 模型，進行商品分群，優化商品管理，以促進業績成長、降低庫存成本。
